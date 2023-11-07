@@ -1,0 +1,76 @@
+:root {
+  --fuji-white: #dcd7ba;
+  --sumi-ink1: #1f1f28;
+  --carp-yellow: #e6c384;
+  --wave-red: #e46876;
+  --surimi-orange: #ffa066;
+  --neu-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5),
+    -4px -4px 4px rgba(255, 255, 255, 0.075);
+  --neu-shadow-light: 2px 2px 4px rgba(0, 0, 0, 0.5),
+    -2px -2px 2px rgba(255, 255, 255, 0.075);
+  --neu-shadow-light-pressed: inset 2px 2px 4px rgba(0, 0, 0, 0.5),
+    inset -2px -2px 2px rgba(255, 255, 255, 0.075);
+}
+
+body {
+  background: var(--sumi-ink1);
+  color: var(--fuji-white);
+  font-family: "Monaco", monospace;
+}
+
+button {
+  border-radius: 4px;
+  border: none;
+
+  box-shadow: var(--neu-shadow-light);
+}
+
+button:active {
+  box-shadow: var(--neu-shadow-light-pressed);
+
+}
+
+.base {
+  width: 256px;
+  height: 360px;
+
+  display: grid;
+  grid-template-rows: 1fr 3fr;
+  gap: 1rem;
+
+  background: var(--sumi-ink1);
+
+  padding: 1rem;
+  border-radius: 8px;
+
+  box-shadow: var(--neu-shadow);
+}
+
+.display {
+  background: var(--carp-yellow);
+  color: black;
+
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  box-shadow: var(--neu-shadow-light-pressed);
+
+  display: grid;
+  place-content: end;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 0.5rem;
+}
+
+.operator {
+  color: var(--wave-red);
+}
+
+.equals {
+  color: var(--surimi-orange);
+  grid-row: 2 / span 4;
+  grid-column-start: 4;
+}
