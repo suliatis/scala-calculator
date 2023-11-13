@@ -20,7 +20,7 @@ type Model = Calculator
 object App extends TyrianApp[Msg, Model]:
 
   override def init(flags: Map[String, String]): (Model, Cmd[IO, Msg]) =
-    Calculator.Init()
+    Calculator()
       -> Cmd.None
 
   override def update(model: Model): Msg => (Model, Cmd[IO, Msg]) =
