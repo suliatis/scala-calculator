@@ -31,27 +31,6 @@ enum Display:
       case show @ Input(_) =>
         show
 
-  def asResult(): Display =
-    this match
-      case Cleared | Error =>
-        Result(BigDecimal("0"))
-      case Input(value) =>
-        Result(BigDecimal(value))
-      case result @ Result(_) =>
-        result
-
-  def withResult(value: BigDecimal): Display =
-    Result(value)
-
-  def read(): BigDecimal =
-    this match
-      case Cleared | Error =>
-        BigDecimal("0")
-      case Input(value) =>
-        BigDecimal(value)
-      case Result(value) =>
-        value
-
   def readInput(): Option[BigDecimal] =
     this match
       case Cleared | Error | Result(_) =>
