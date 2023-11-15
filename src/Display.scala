@@ -26,7 +26,7 @@ enum Display:
     this match
       case Cleared | Error | Result(_) =>
         Input("0.")
-      case Input(value) if value.contains(".") =>
+      case Input(value) if !value.contains(".") =>
         Input(value + ".")
       case show @ Input(_) =>
         show

@@ -5,4 +5,7 @@
 
 //> using dep io.indigoengine::tyrian-io_sjs1:0.8.0
 
+//> using test.dep com.disneystreaming::weaver-cats_sjs1:0.8.3
+//> using testFramework weaver.framework.CatsEffect
+
 //> using options -Wvalue-discard -Wunused:all

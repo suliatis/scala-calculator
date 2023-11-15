@@ -20,5 +20,8 @@ live: ## Package the application in dev mode
 		--js-emit-source-maps\
 		--output App.js -f
 
+test:
+	scala-cli test .
+
 help: ## Show help message
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' -e 's/:.*#/: #/' | column -t -s '##'
