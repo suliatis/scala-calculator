@@ -2,25 +2,35 @@ import cats.syntax.all.*
 
 case class Calculator(
     display: Display = Display.Cleared,
-    input: Option[BigDecimal] = None,
+    input: Numeral = Numeral.zero,
     calculation: Option[Calculation] = None,
 ):
 
   def showDisplay(): String =
     display.show()
 
-  def enterDigit(digit: Char): Calculator =
-    val display_ = display.append(digit)
+  def enterDigit(digit: Digit): Calculator =
+    val input_ = display match
+      case Display.Result(_) | Display.Cleared | Display.Error =>
+        Numeral.zero.append(digit)
+      case _ =>
+        input.append(digit)
+
     this.copy(
-      display = display_,
-      input = display_.readInput(),
+      display = Display.Input(input_),
+      input = input_,
     )
 
   def enterDecimal(): Calculator =
-    val display_ = display.appendDecimal()
+    val input_ = display match
+      case Display.Result(_) | Display.Cleared | Display.Error =>
+        Numeral.zero.appendDecimal()
+      case _ =>
+        input.appendDecimal()
+
     this.copy(
-      display = display_,
-      input = display_.readInput(),
+      display = Display.Input(input_),
+      input = input_,
     )
 
   def enterOperator(operator: Operator): Calculator =
@@ -34,12 +44,11 @@ case class Calculator(
       .orElse:
         for
           c <- calculation if c.operator != operator
-          i <- input
-          r = c.evaluateWith(i) match
+          r = c.evaluateWith(input.asDecimal()) match
             case None =>
               this.copy(
                 display = Display.Error,
-                input = None,
+                input = Numeral.zero,
                 calculation = None,
               )
             case Some(result) =>
@@ -49,16 +58,15 @@ case class Calculator(
               )
         yield r
       .getOrElse:
-        val i = input.getOrElse(BigDecimal(0))
         this.copy(
-          display = Display.Result(i),
-          calculation = Some(Calculation(i, operator)),
+          display = Display.Result(input.asDecimal()),
+          calculation = Some(Calculation(input.asDecimal(), operator)),
         )
 
   def enterEquals(): Calculator =
-    (calculation, input) match
-      case (Some(calculation), Some(input)) =>
-        calculation.evaluateWith(input)
+    calculation match
+      case Some(calculation) =>
+        calculation.evaluateWith(input.asDecimal())
           .map: result =>
             this.copy(
               display = Display.Result(result),
@@ -67,10 +75,10 @@ case class Calculator(
           .getOrElse:
             this.copy(
               display = Display.Error,
-              input = None,
+              input = Numeral.zero,
               calculation = None,
             )
-      case (_, _) =>
+      case _ =>
         this
 
   def showClear(): String =
@@ -82,7 +90,7 @@ case class Calculator(
   def clear(): Calculator =
     if display.isCleared() then
       this.copy(
-        input = None,
+        input = Numeral.zero,
         calculation = None,
       )
     else

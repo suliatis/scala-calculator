@@ -10,24 +10,6 @@ object DisplayTest extends weaver.SimpleIOSuite:
       Result(BigDecimal("1")).show() == "1",
     )
 
-  pureTest("Display.appand"):
-    expect.all(
-      Cleared.append('1') == Input("1"),
-      Error.append('1') == Input("1"),
-      Input("1").append('2') == Input("12"),
-      Result(BigDecimal("1")).append('1') == Input("1"),
-    )
-
-  pureTest("Display.appendDecimal"):
-    expect.all(
-      Cleared.appendDecimal() == Input("0."),
-      Error.appendDecimal() == Input("0."),
-      Input("1").appendDecimal() == Input("1."),
-      Input("1.").appendDecimal() == Input("1."),
-      Input("1.0").appendDecimal() == Input("1.0"),
-      Result(BigDecimal("1")).appendDecimal() == Input("0."),
-    )
-
   pureTest("Display.readInput"):
     expect.all(
       Cleared.readInput() == None,

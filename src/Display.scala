@@ -15,22 +15,6 @@ enum Display:
       case Result(value) =>
         value.toString()
 
-  def append(digit: Char): Display =
-    this match
-      case Cleared | Error | Result(_) =>
-        Input(digit.toString())
-      case Input(value) =>
-        Input(value + digit)
-
-  def appendDecimal(): Display =
-    this match
-      case Cleared | Error | Result(_) =>
-        Input("0.")
-      case Input(value) if !value.contains(".") =>
-        Input(value + ".")
-      case show @ Input(_) =>
-        show
-
   def readInput(): Option[BigDecimal] =
     this match
       case Cleared | Error | Result(_) =>

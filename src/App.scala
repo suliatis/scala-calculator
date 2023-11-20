@@ -11,7 +11,7 @@ enum Msg:
   case EnterOperator(operator: Operator)
   case EnterEquals
   case EnterDecimal
-  case Enter(input: Char)
+  case Enter(input: Digit)
   case Clear
   case Ignore
 
@@ -69,16 +69,16 @@ object App extends TyrianApp[Msg, Model]:
           `class` := "equals",
           onClick(Msg.EnterEquals),
         )("="),
-        button(onClick(Msg.Enter('7')))("7"),
-        button(onClick(Msg.Enter('8')))("8"),
-        button(onClick(Msg.Enter('9')))("9"),
-        button(onClick(Msg.Enter('4')))("4"),
-        button(onClick(Msg.Enter('5')))("5"),
-        button(onClick(Msg.Enter('6')))("6"),
-        button(onClick(Msg.Enter('1')))("1"),
-        button(onClick(Msg.Enter('2')))("2"),
-        button(onClick(Msg.Enter('3')))("3"),
-        button(onClick(Msg.Enter('0')))("0"),
+        button(onClick(Msg.Enter(Digit('7'))))("7"),
+        button(onClick(Msg.Enter(Digit('8'))))("8"),
+        button(onClick(Msg.Enter(Digit('9'))))("9"),
+        button(onClick(Msg.Enter(Digit('4'))))("4"),
+        button(onClick(Msg.Enter(Digit('5'))))("5"),
+        button(onClick(Msg.Enter(Digit('6'))))("6"),
+        button(onClick(Msg.Enter(Digit('1'))))("1"),
+        button(onClick(Msg.Enter(Digit('2'))))("2"),
+        button(onClick(Msg.Enter(Digit('3'))))("3"),
+        button(onClick(Msg.Enter(Digit('0'))))("0"),
         button(onClick(Msg.EnterDecimal))("."),
         button(onClick(Msg.Clear))(model.showClear()),
       ),
