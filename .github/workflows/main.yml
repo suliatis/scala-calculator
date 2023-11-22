@@ -18,3 +18,10 @@ jobs:
         run: make test
       - name: Release
         run: make release
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path:
+            - "index.html"
+            - "App.js"
+            - "styles/"
