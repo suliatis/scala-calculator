@@ -20,7 +20,12 @@ live: ## Package the application in dev mode
 		--js-emit-source-maps\
 		--output App.js -f
 
-test:
+release: ## Package the application in release mode
+	scala-cli --power package .\
+		--js-mode release\
+		--output App.js -f
+
+test: ## Run tests
 	scala-cli test .
 
 help: ## Show help message
