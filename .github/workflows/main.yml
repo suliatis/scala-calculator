@@ -6,7 +6,7 @@ on:
       - "*"
 
 jobs:
-  test:
+  build:
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v3
@@ -16,10 +16,5 @@ jobs:
       - uses: VirtusLab/scala-cli-setup@main
       - name: Tests
         run: make test
-
-  build:
-    runs-on: "ubuntu-latest"
-    needs: test
-    steps:
       - name: Release
         run: make release
