@@ -18,6 +18,8 @@ jobs:
         run: make test
       - name: Release
         run: make release
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
