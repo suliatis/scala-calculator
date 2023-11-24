@@ -25,6 +25,15 @@ release: ## Package the application in release mode
 		--js-mode release\
 		--output App.js -f
 
+site: ## Collect static assets for GitHub Pages
+	mkdir _site
+	cp -R styles _site/styles
+	cp App.js _site/App.js
+	cp index.html _site/index.html
+	chmod -c -R +rX "_site/" | while read line; do
+		echo "::warning title=Invalid file permissions automatically fixed::$line"
+	done
+
 test: ## Run tests
 	scala-cli test .
 
