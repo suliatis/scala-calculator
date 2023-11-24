@@ -1,6 +1,6 @@
 # Scala Calculator
 
-A simple calculator app built with Scala JS and Tyrian.
+A simple calculator app built with Scala JS and Tyrian. Try the [Demo](https://suliatis.github.io/scala-calculator/)
 
 ## Getting Started
 
