@@ -6,6 +6,7 @@ clean: ## Clean the build files
 	rm -rf .metals
 	rm App.js
 	rm App.js.map
+	rm _site
 
 repl: ## Start a repl including the project
 	scala-cli repl .
@@ -30,9 +31,7 @@ site: ## Collect static assets for GitHub Pages
 	cp -R styles _site/styles
 	cp App.js _site/App.js
 	cp index.html _site/index.html
-	chmod -c -R +rX "_site/" | while read line; do
-		echo "::warning title=Invalid file permissions automatically fixed::$line"
-	done
+	chmod -c -R +rX "_site/"
 
 test: ## Run tests
 	scala-cli test .
