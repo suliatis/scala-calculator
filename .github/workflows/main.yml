@@ -7,6 +7,9 @@ on:
 
 jobs:
   build:
+    environment:
+      name: github-pages
+      url: ${{ steps.build.outputs.page_url }}
     permissions:
       pages: write
       id-token: write
