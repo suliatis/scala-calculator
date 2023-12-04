@@ -6,7 +6,7 @@ clean: ## Clean the build files
 	rm -rf .metals
 	rm App.js
 	rm App.js.map
-	rm _site
+	rm -rf _site
 
 repl: ## Start a repl including the project
 	scala-cli repl .
