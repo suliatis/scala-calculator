@@ -4,6 +4,7 @@ case class Calculator(
     display: Display = Display.Cleared,
     input: Numeral = Numeral.zero,
     calculation: Option[Calculation] = None,
+    numpad: NumPad = NumPad(),
 ):
 
   def showDisplay(): String =
@@ -19,6 +20,7 @@ case class Calculator(
     this.copy(
       display = Display.Input(input_),
       input = input_,
+      numpad = NumPad(isCleared = false),
     )
 
   def enterDecimal(): Calculator =
@@ -31,6 +33,7 @@ case class Calculator(
     this.copy(
       display = Display.Input(input_),
       input = input_,
+      numpad = NumPad(isCleared = false),
     )
 
   def enterOperator(operator: Operator): Calculator =
@@ -50,17 +53,20 @@ case class Calculator(
                 display = Display.Error,
                 input = Numeral.zero,
                 calculation = None,
+                numpad = NumPad(isCleared = false),
               )
             case Some(result) =>
               this.copy(
                 display = Display.Result(result),
                 calculation = Some(Calculation(result, operator)),
+                numpad = NumPad(isCleared = false),
               )
         yield r
       .getOrElse:
         this.copy(
           display = Display.Result(input.asDecimal()),
           calculation = Some(Calculation(input.asDecimal(), operator)),
+          numpad = NumPad(isCleared = false),
         )
 
   def enterEquals(): Calculator =
@@ -71,29 +77,26 @@ case class Calculator(
             this.copy(
               display = Display.Result(result),
               calculation = Some(calculation.copy(num = result)),
+              numpad = NumPad(isCleared = false),
             )
           .getOrElse:
             this.copy(
               display = Display.Error,
               input = Numeral.zero,
               calculation = None,
+              numpad = NumPad(isCleared = false),
             )
       case _ =>
         this
 
-  def showClear(): String =
-    if display.isCleared() then
-      "AC"
-    else
-      "C"
-
   def clear(): Calculator =
-    if display.isCleared() then
-      this.copy(
-        input = Numeral.zero,
-        calculation = None,
-      )
-    else
-      this.copy(
-        display = display.clear(),
-      )
+    this.copy(
+      display = display.clear(),
+      numpad = NumPad(isCleared = true),
+    )
+
+  def allClear(): Calculator =
+    this.copy(
+      input = Numeral.zero,
+      calculation = None,
+    )

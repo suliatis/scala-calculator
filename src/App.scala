@@ -7,13 +7,9 @@ import tyrian.Routing
 import tyrian.Sub
 import tyrian.TyrianApp
 
-enum Msg:
-  case EnterOperator(operator: Operator)
-  case EnterEquals
-  case EnterDecimal
-  case Enter(input: Digit)
-  case Clear
-  case Ignore
+case object Ignore
+
+type Msg = Ignore.type | NumPad.Msg
 
 type Model = Calculator
 
@@ -24,71 +20,44 @@ object App extends TyrianApp[Msg, Model]:
       -> Cmd.None
 
   override def update(model: Model): Msg => (Model, Cmd[IO, Msg]) =
-    case Msg.EnterOperator(operator) =>
-      model.enterOperator(operator)
-        -> Cmd.None
-    case Msg.EnterEquals =>
-      model.enterEquals()
-        -> Cmd.None
-    case Msg.Enter(digit) =>
-      model.enterDigit(digit)
-        -> Cmd.None
-    case Msg.EnterDecimal =>
-      model.enterDecimal()
-        -> Cmd.None
-    case Msg.Clear =>
+    case NumPad.Msg.KeyPressed(_) =>
+      model ->
+        Cmd.None
+    case NumPad.Msg.KeyReleased(NumKey.OperatorKey(operator)) =>
+      model.enterOperator(operator) ->
+        Cmd.None
+    case NumPad.Msg.KeyReleased(NumKey.EqualsKey) =>
+      model.enterEquals() ->
+        Cmd.None
+    case NumPad.Msg.KeyReleased(NumKey.DigitKey(digit)) =>
+      model.enterDigit(digit) ->
+        Cmd.None
+    case NumPad.Msg.KeyReleased(NumKey.DecimalKey) =>
+      model.enterDecimal() ->
+        Cmd.None
+    case NumPad.Msg.KeyReleased(NumKey.ClearKey) =>
       model.clear()
         -> Cmd.None
-    case Msg.Ignore =>
-      model
+    case NumPad.Msg.KeyReleased(NumKey.AllClearKey) =>
+      model.allClear()
         -> Cmd.None
+    case Ignore =>
+      model ->
+        Cmd.None
 
   override def view(model: Model): Html[Msg] =
     div(`class` := "base")(
       div(`class` := "display")(
         span()(model.showDisplay()),
       ),
-      div(`class` := "buttons")(
-        button(
-          `class` := "operator",
-          onClick(Msg.EnterOperator(Operator.Plus)),
-        )("+"),
-        button(
-          `class` := "operator",
-          onClick(Msg.EnterOperator(Operator.Minus)),
-        )("-"),
-        button(
-          `class` := "operator",
-          onClick(Msg.EnterOperator(Operator.Multiply)),
-        )("×"),
-        button(
-          `class` := "operator",
-          onClick(Msg.EnterOperator(Operator.Divide)),
-        )("÷"),
-        button(
-          `class` := "equals",
-          onClick(Msg.EnterEquals),
-        )("="),
-        button(onClick(Msg.Enter(Digit('7'))))("7"),
-        button(onClick(Msg.Enter(Digit('8'))))("8"),
-        button(onClick(Msg.Enter(Digit('9'))))("9"),
-        button(onClick(Msg.Enter(Digit('4'))))("4"),
-        button(onClick(Msg.Enter(Digit('5'))))("5"),
-        button(onClick(Msg.Enter(Digit('6'))))("6"),
-        button(onClick(Msg.Enter(Digit('1'))))("1"),
-        button(onClick(Msg.Enter(Digit('2'))))("2"),
-        button(onClick(Msg.Enter(Digit('3'))))("3"),
-        button(onClick(Msg.Enter(Digit('0'))))("0"),
-        button(onClick(Msg.EnterDecimal))("."),
-        button(onClick(Msg.Clear))(model.showClear()),
-      ),
+      model.numpad.view(),
     )
 
   override def subscriptions(model: Model): Sub[IO, Msg] =
     Sub.None
 
   override def router: Location => Msg =
-    Routing.none(Msg.Ignore)
+    Routing.none(Ignore)
 
   @main def launchApp(): Unit =
     launch("app")
