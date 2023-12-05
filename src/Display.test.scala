@@ -26,14 +26,6 @@ object DisplayTest extends weaver.SimpleIOSuite:
       Result(BigDecimal("1")).clear() == Cleared,
     )
 
-  pureTest("Display.isCleared"):
-    expect.all(
-      Cleared.isCleared() == true,
-      Error.isCleared() == true,
-      Input("1").isCleared() == false,
-      Result(BigDecimal("1")).isCleared() == false,
-    )
-
   pureTest("Display.isResult"):
     expect.all(
       Cleared.isResult() == false,

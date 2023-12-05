@@ -10,6 +10,21 @@ case class Calculator(
   def showDisplay(): String =
     display.show()
 
+  def onKeyReleased(key: NumKey): Calculator =
+    key match
+      case NumKey.OperatorKey(operator) =>
+        enterOperator(operator)
+      case NumKey.DigitKey(digit) =>
+        enterDigit(digit)
+      case NumKey.EqualsKey =>
+        enterEquals()
+      case NumKey.DecimalKey =>
+        enterDecimal()
+      case NumKey.ClearKey =>
+        clear()
+      case NumKey.AllClearKey =>
+        allClear()
+
   def enterDigit(digit: Digit): Calculator =
     val input_ = display match
       case Display.Result(_) | Display.Cleared | Display.Error =>

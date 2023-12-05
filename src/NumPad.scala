@@ -1,23 +1,27 @@
+import cats.effect.IO
 import tyrian.Html
 import tyrian.Html.*
+import tyrian.Sub
 
 case class NumPad(
     isCleared: Boolean = true,
 ):
 
-  def view(): Html[NumPad.Msg] =
+  def view(): Html[NumKey.Msg] =
     div(`class` := "buttons")(
       NumPad.keys(isCleared).map:
         _.view(),
     )
 
+  def subscriptions(): Sub[IO, NumKey.Msg] =
+    Sub.Batch(
+      NumPad.keys().map:
+        _.subscriptions(),
+    )
+
 object NumPad:
 
-  enum Msg:
-    case KeyPressed(key: NumKey)
-    case KeyReleased(key: NumKey)
-
-  def keys(isCleared: Boolean): List[NumKey] =
+  def keys(): List[NumKey] =
     List(
       NumKey.OperatorKey(Operator.Plus),
       NumKey.OperatorKey(Operator.Minus),
@@ -35,5 +39,16 @@ object NumPad:
       NumKey.DigitKey(Digit('0')),
       NumKey.EqualsKey,
       NumKey.DecimalKey,
-      if isCleared then NumKey.AllClearKey else NumKey.ClearKey,
+      NumKey.AllClearKey,
+      NumKey.ClearKey,
     )
+
+  def keys(isCleared: Boolean): List[NumKey] =
+    keys().filter: key =>
+      key match
+        case NumKey.AllClearKey =>
+          isCleared
+        case NumKey.ClearKey =>
+          !isCleared
+        case _ =>
+          true

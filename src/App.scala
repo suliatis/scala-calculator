@@ -9,7 +9,7 @@ import tyrian.TyrianApp
 
 case object Ignore
 
-type Msg = Ignore.type | NumPad.Msg
+type Msg = Ignore.type | NumKey.Msg
 
 type Model = Calculator
 
@@ -20,27 +20,12 @@ object App extends TyrianApp[Msg, Model]:
       -> Cmd.None
 
   override def update(model: Model): Msg => (Model, Cmd[IO, Msg]) =
-    case NumPad.Msg.KeyPressed(_) =>
+    case NumKey.Msg.KeyPressed(_) =>
       model ->
         Cmd.None
-    case NumPad.Msg.KeyReleased(NumKey.OperatorKey(operator)) =>
-      model.enterOperator(operator) ->
+    case NumKey.Msg.KeyReleased(key) =>
+      model.onKeyReleased(key) ->
         Cmd.None
-    case NumPad.Msg.KeyReleased(NumKey.EqualsKey) =>
-      model.enterEquals() ->
-        Cmd.None
-    case NumPad.Msg.KeyReleased(NumKey.DigitKey(digit)) =>
-      model.enterDigit(digit) ->
-        Cmd.None
-    case NumPad.Msg.KeyReleased(NumKey.DecimalKey) =>
-      model.enterDecimal() ->
-        Cmd.None
-    case NumPad.Msg.KeyReleased(NumKey.ClearKey) =>
-      model.clear()
-        -> Cmd.None
-    case NumPad.Msg.KeyReleased(NumKey.AllClearKey) =>
-      model.allClear()
-        -> Cmd.None
     case Ignore =>
       model ->
         Cmd.None
@@ -54,7 +39,9 @@ object App extends TyrianApp[Msg, Model]:
     )
 
   override def subscriptions(model: Model): Sub[IO, Msg] =
-    Sub.None
+    Sub.Batch(
+      model.numpad.subscriptions(),
+    )
 
   override def router: Location => Msg =
     Routing.none(Ignore)

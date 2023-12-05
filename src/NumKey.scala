@@ -1,5 +1,7 @@
+import cats.effect.IO
 import tyrian.Html
 import tyrian.Html.*
+import tyrian.Sub
 
 enum NumKey:
   case OperatorKey(operator: Operator)
@@ -40,10 +42,42 @@ enum NumKey:
         "all_clear"
 
   def onEnter() =
-    onClick(NumPad.Msg.KeyReleased(this))
+    onClick(NumKey.Msg.KeyReleased(this))
 
-  def view(): Html[NumPad.Msg] =
+  def view(): Html[NumKey.Msg] =
     button(
       `class` := kind(),
       onEnter(),
     )(showLabel())
+
+  def keys(): List[String] =
+    this match
+      case OperatorKey(operator) =>
+        List(operator.key())
+      case DigitKey(digit) =>
+        List(digit.key())
+      case EqualsKey =>
+        List("=", "Enter")
+      case DecimalKey =>
+        List(".", ",")
+      case ClearKey | AllClearKey =>
+        List("Backspace", "Delete")
+
+  def subscriptions(): Sub[IO, NumKey.Msg] =
+    Sub.Combine(
+      Sub.Batch(
+        keys().map: key =>
+          Keyboard.onKeyPressed(key).map: _ =>
+            NumKey.Msg.KeyPressed(this),
+      ),
+      Sub.Batch(
+        keys().map: key =>
+          Keyboard.onKeyReleased(key).map: _ =>
+            NumKey.Msg.KeyReleased(this),
+      ),
+    )
+
+object NumKey:
+  enum Msg:
+    case KeyPressed(key: NumKey)
+    case KeyReleased(key: NumKey)

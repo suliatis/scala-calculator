@@ -14,3 +14,14 @@ enum Operator(val evaluate: (BigDecimal, BigDecimal) => BigDecimal):
         "×"
       case Divide =>
         "÷"
+
+  def key(): String =
+    this match
+      case Plus =>
+        "+"
+      case Minus =>
+        "-"
+      case Multiply =>
+        "*"
+      case Divide =>
+        "/"

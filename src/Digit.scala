@@ -1,12 +1,15 @@
 import scala.compiletime.error
-import scala.compiletime.requireConst
 import scala.compiletime.ops.string.*
+import scala.compiletime.requireConst
 
 opaque type Digit = Char
 
 extension (self: Digit)
 
   def show(): String =
+    self.toString()
+
+  def key(): String =
     self.toString()
 
   def asInt(): Int =

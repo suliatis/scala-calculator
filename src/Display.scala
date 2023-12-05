@@ -25,13 +25,6 @@ enum Display:
   def clear(): Display =
     Cleared
 
-  def isCleared(): Boolean =
-    this match
-      case Cleared | Error =>
-        true
-      case Input(_) | Result(_) =>
-        false
-
   def isResult(): Boolean =
     this match
       case Result(_) =>
