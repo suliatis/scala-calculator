@@ -10,8 +10,13 @@ case class Calculator(
   def showDisplay(): String =
     display.show()
 
+  def onKeyPressed(key: NumKey): Calculator =
+    copy(
+      numpad = numpad.press(key),
+    )
+
   def onKeyReleased(key: NumKey): Calculator =
-    key match
+    val next = key match
       case NumKey.OperatorKey(operator) =>
         enterOperator(operator)
       case NumKey.DigitKey(digit) =>
@@ -24,6 +29,10 @@ case class Calculator(
         clear()
       case NumKey.AllClearKey =>
         allClear()
+
+    next.copy(
+      numpad = numpad.release(),
+    )
 
   def enterDigit(digit: Digit): Calculator =
     val input_ = display match

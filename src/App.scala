@@ -20,8 +20,8 @@ object App extends TyrianApp[Msg, Model]:
       -> Cmd.None
 
   override def update(model: Model): Msg => (Model, Cmd[IO, Msg]) =
-    case NumKey.Msg.KeyPressed(_) =>
-      model ->
+    case NumKey.Msg.KeyPressed(key) =>
+      model.onKeyPressed(key) ->
         Cmd.None
     case NumKey.Msg.KeyReleased(key) =>
       model.onKeyReleased(key) ->

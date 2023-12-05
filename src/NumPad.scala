@@ -5,12 +5,19 @@ import tyrian.Sub
 
 case class NumPad(
     isCleared: Boolean = true,
+    pressedKey: Option[NumKey] = None,
 ):
+
+  def press(key: NumKey): NumPad =
+    copy(pressedKey = Some(key))
+
+  def release(): NumPad =
+    copy(pressedKey = None)
 
   def view(): Html[NumKey.Msg] =
     div(`class` := "buttons")(
-      NumPad.keys(isCleared).map:
-        _.view(),
+      NumPad.keys(isCleared).map: key =>
+        key.view(pressedKey.exists(_ == key)),
     )
 
   def subscriptions(): Sub[IO, NumKey.Msg] =

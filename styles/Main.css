@@ -25,9 +25,8 @@ button {
   box-shadow: var(--neu-shadow-light);
 }
 
-button:active {
+button:active, button.active {
   box-shadow: var(--neu-shadow-light-pressed);
-
 }
 
 .base {

@@ -44,9 +44,15 @@ enum NumKey:
   def onEnter() =
     onClick(NumKey.Msg.KeyReleased(this))
 
-  def view(): Html[NumKey.Msg] =
+  def view(isPressed: Boolean): Html[NumKey.Msg] =
+    val classes =
+      if isPressed then
+        List(kind(), "active")
+      else
+        List(kind())
+
     button(
-      `class` := kind(),
+      `class` := classes.mkString(" "),
       onEnter(),
     )(showLabel())
 
